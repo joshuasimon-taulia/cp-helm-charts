@@ -94,7 +94,11 @@ spec:
           {{ end }}
           {{- range $key, $value := .Values.customEnv }}
           - name: {{ $key | quote }}
+          {{- if kindIs "map" $value }}
+            {{ toYaml $value | nindent 12 | trim }}
+          {{- else }}
             value: {{ $value | quote }}
+          {{- end }}
           {{- end }}
           {{- if .Values.schemaRegistryOpts }}
           - name: SCHEMA_REGISTRY_OPTS
